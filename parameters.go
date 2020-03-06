@@ -7,11 +7,9 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"sweb/form"
 	"time"
 )
-
-const FormDateTimeFormat = "2006-01-02T15:04"
-const FormDateFormat = "2006-01-02"
 
 func RequirePanic(v ...interface{}) {
 	str := fmt.Sprintln(v...)
@@ -60,7 +58,7 @@ func OptionalDate(values url.Values, key string) *time.Time {
 		return nil
 	}
 
-	t, err := time.ParseInLocation(FormDateFormat, str, time.Local)
+	t, err := time.ParseInLocation(form.FormDateFormat, str, time.Local)
 
 	if err != nil {
 		log.Panicln("invalid date time format")
@@ -82,7 +80,7 @@ func OptionalDateTime(values url.Values, key1, key2 string) *time.Time {
 		return nil
 	}
 
-	t, err := time.ParseInLocation(FormDateTimeFormat, str1 + "T" + str2, time.Local)
+	t, err := time.ParseInLocation(form.FormDateTimeFormat, str1 + "T" + str2, time.Local)
 
 	if err != nil {
 		log.Panicln("invalid date time format")
@@ -146,7 +144,20 @@ func OptionalBool(values url.Values, key string) bool {
 func RequireDateTime(values url.Values, key string) time.Time {
 	str := RequireString(values, key)
 
-	t, err := time.ParseInLocation(FormDateTimeFormat, str, time.Local)
+	t, err := time.ParseInLocation(form.FormDateTimeFormat, str, time.Local)
+
+	if err != nil {
+		log.Panicln("invalid date time format")
+	}
+
+	return t
+}
+
+func RequireDateTime2(values url.Values, dateKey string, timeKey string) time.Time {
+	dateStr := RequireString(values, dateKey)
+	timeStr := RequireString(values, timeKey)
+
+	t, err := time.ParseInLocation(form.FormDateTimeFormat, dateStr + "T" + timeStr, time.Local)
 
 	if err != nil {
 		log.Panicln("invalid date time format")

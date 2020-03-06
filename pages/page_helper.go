@@ -1,6 +1,14 @@
 package pages
 
-import "reflect"
+import (
+	"errors"
+	"reflect"
+	"sweb/database"
+	"sweb/form"
+	"time"
+)
+
+var ErrUnsupportedType = errors.New("unsupported type")
 
 type PageHelper struct {
 }
@@ -21,4 +29,26 @@ func (PageHelper) FormatIs(str string, values ...bool) string {
 	}
 
 	return str
+}
+
+func (PageHelper) FormatFormDate(t interface{}) string {
+	switch t.(type) {
+	case database.Time:
+		return t.(database.Time).Format(form.FormDateFormat)
+	case time.Time:
+		return t.(time.Time).Format(form.FormDateFormat)
+	}
+
+	panic(ErrUnsupportedType)
+}
+
+func (PageHelper) FormatFormTime(t interface{}) string {
+	switch t.(type) {
+	case database.Time:
+		return t.(database.Time).Format(form.FormTimeFormat)
+	case time.Time:
+		return t.(time.Time).Format(form.FormTimeFormat)
+	}
+
+	panic(ErrUnsupportedType)
 }

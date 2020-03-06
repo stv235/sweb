@@ -1,9 +1,9 @@
 package database
 
 import (
-	"sweb"
 	"database/sql/driver"
 	"errors"
+	"sweb/form"
 	"time"
 )
 
@@ -53,9 +53,13 @@ func OptionalTime(t *time.Time) *Time {
 }
 
 func (t Time) FormatForm() string {
-	return t.Time.Format(sweb.FormDateTimeFormat)
+	return t.Time.Format(form.FormDateTimeFormat)
 }
 
 func (t Time) FormatFormDate() string {
-	return t.Time.Format(sweb.FormDateFormat)
+	return t.Time.Format(form.FormDateFormat)
+}
+
+func (t Time) FormatFormTime() string {
+	return t.Time.Format(form.FormTimeFormat)
 }
