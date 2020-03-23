@@ -1,6 +1,7 @@
 package pages
 
 import (
+	"fmt"
 	"sweb/ccf"
 	"bytes"
 	"html/template"
@@ -74,6 +75,15 @@ func (handler Handler) serveAction(action action, w http.ResponseWriter, r *http
 		if _, err := io.Copy(w, action.(*send).r); err != nil {
 			log.Println(TagHttp, err)
 		}
+	case *requireAuth:
+		w.Header().Set("WWW-Authenticate", fmt.Sprintf("Basic realm=\"%s\"", action.(*requireAuth).realm))
+		w.WriteHeader(401)
+
+		if _, err := w.Write([]byte("Unauthorised.\n")); err != nil {
+			log.Println(TagHttp, err)
+		}
+
+		return
 	}
 }
 

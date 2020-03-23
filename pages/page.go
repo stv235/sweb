@@ -39,6 +39,15 @@ func (page Page) handle(w http.ResponseWriter, r *http.Request, pathParameters u
 	context.PathParameters = pathParameters
 	context.SessionParameters = sessionParameters
 
+	username, password, ok := r.BasicAuth()
+
+	if ok {
+		context.Auth = &BasicAuth{
+			Username: username,
+			Password: password,
+		}
+	}
+
 	switch {
 	case r.Method == http.MethodGet && page.Get != nil:
 		return page.handleGet(w, r, &context)

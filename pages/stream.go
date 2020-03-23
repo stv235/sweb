@@ -17,6 +17,15 @@ func (stream Stream) handle(w http.ResponseWriter, r *http.Request, pathParamete
 	context.PathParameters = pathParameters
 	context.ContentType = r.Header.Get("Content-Type")
 
+	username, password, ok := r.BasicAuth()
+
+	if ok {
+		context.Auth = &BasicAuth{
+			Username: username,
+			Password: password,
+		}
+	}
+
 	context.W = w
 
 	switch {
