@@ -3,9 +3,9 @@ package database
 import "strings"
 
 func matchOr(search interface{}, texts ...string) bool {
-	//tokens := strings.Split(search, " ")
+	tokens := strings.Split(search.(string), " ")
 
-	tokens := search.([]string)
+	//tokens := search.([]string)
 
 	for i, token := range tokens {
 		tokens[i] = strings.ToLower(token)
