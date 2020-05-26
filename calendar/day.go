@@ -53,3 +53,11 @@ func Day(t time.Time) time.Time {
 func Today() time.Time {
 	return Day(time.Now())
 }
+
+func PreviousMonday(t time.Time) time.Time {
+	for t.Weekday() != time.Monday {
+		t = t.AddDate(0, 0, -1)
+	}
+
+	return t
+}
