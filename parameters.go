@@ -39,6 +39,32 @@ func RequireInt64(values url.Values, key string) int64 {
 	return valInt
 }
 
+func RequireInt64s(values url.Values, key string) []int64 {
+	valStrs, ok := values[key]
+
+	if !ok {
+		RequirePanic("required variable " + key + " empty")
+	}
+
+	valInts := make([]int64, 0)
+
+	for _, valStr := range valStrs {
+		if valStr == "" {
+			RequirePanic("required variable " + key + " empty")
+		}
+
+		valInt, err := strconv.ParseInt(valStr, 10, 64)
+
+		if err != nil {
+			log.Panicln(err)
+		}
+
+		valInts = append(valInts, valInt)
+	}
+
+	return valInts
+}
+
 func OptionalInt64(values url.Values, key string) *int64 {
 	valStr := values.Get(key)
 
