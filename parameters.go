@@ -171,6 +171,22 @@ func OptionalString(values url.Values, key string) string {
 	return valStr
 }
 
+func OptionalStrings(values url.Values, key string) []string {
+	n, ok := values[key]
+
+	if !ok || len(n) == 0 {
+		return []string{}
+	}
+
+	m := make([]string, len(n))
+
+	for i, str := range n {
+		m[i] = strings.TrimSpace(str)
+	}
+
+	return m
+}
+
 func OptionalFloat64(values url.Values, key string) *float64 {
 	str := OptionalString(values, key)
 
