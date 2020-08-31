@@ -3,8 +3,9 @@ package database
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"io/ioutil"
+	"strconv"
+	"strings"
 )
 
 func Run(db *sql.DB, path string) {
@@ -30,19 +31,19 @@ func Run(db *sql.DB, path string) {
 		}
 	}()
 
-	/*for i, q := range strings.Split(string(buf), ";") {
+	for i, q := range strings.Split(string(buf), ";") {
 		q = strings.TrimSpace(q)
 
 		if _, err := tx.Exec(q); err != nil {
 			panic(errors.New(err.Error() + " \"" + q + "\" [" + strconv.Itoa(1 + i) + "]"))
 		}
-	}*/
-
-
-
-	if _, err := tx.Exec(string(buf)); err != nil {
-		panic(errors.New(fmt.Sprintf("In %v error %v", path, err.Error())))
 	}
+
+
+
+	/*if _, err := tx.Exec(string(buf)); err != nil {
+		panic(errors.New(fmt.Sprintf("In %v error %v", path, err.Error())))
+	}*/
 
 	if err := tx.Commit(); err != nil {
 		panic(err)
