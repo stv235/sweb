@@ -72,7 +72,7 @@ func Update(db Q, tableDef TableDef, ops ColumnOperation) {
 		case columnDef.Primary:
 			whereValues = append(whereValues, v.Interface())
 			whereNames = append(whereNames, columnDef.Name)
-		case ops == nil || ops.Wants(columnDef):
+		case !columnDef.ReadOnly && (ops == nil || ops.Wants(columnDef)):
 			updateValues = append(updateValues, v.Interface())
 			updateNames = append(updateNames, columnDef.Name)
 		}
