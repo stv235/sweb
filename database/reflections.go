@@ -177,7 +177,7 @@ func Insert(db Q, tableDef TableDef, ops ColumnOperation) {
 			if v.Type().Kind() == reflect.Int64 {
 				id = v.Addr().Interface().(*int64)
 			}
-		case ops == nil || ops.Wants(columnDef):
+		case !columnDef.ReadOnly && (ops == nil || ops.Wants(columnDef)):
 			insertValues = append(insertValues, v.Interface())
 			insertNames = append(insertNames, columnDef.Name)
 		}
