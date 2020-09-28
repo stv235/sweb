@@ -5,5 +5,6 @@ type Config struct {
 	DataSourceName string `toml:"data-source-name"`
 	CreateScript   string `toml:"create-script"`
 	CreateQuery string `toml:"create-query"`
+	CreateAlways bool `toml:"create-always"`
 }
 
