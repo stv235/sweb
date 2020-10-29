@@ -11,6 +11,8 @@ type CommonContext struct {
 
 	Path           string
 	PathParameters url.Values
+
+	Auth *BasicAuth
 }
 
 func (ctx *CommonContext) Render(name string, data interface{}) {
@@ -38,9 +40,15 @@ func (ctx *CommonContext) Redirect(url string, parameters ...interface{}) {
 	ctx.action = &redirector{ url: url }
 }
 
+
+
 func (ctx *CommonContext) Status(statusCode int, message string) {
 	ctx.checkAction()
 	ctx.action = &status{ code: statusCode, message: message }
+}
+
+func (ctx *CommonContext) RequireAuth(realm string) {
+	ctx.action = &requireAuth{ realm: realm }
 }
 
 func (ctx *CommonContext) checkAction() {

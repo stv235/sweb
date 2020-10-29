@@ -39,6 +39,58 @@ func RequireInt64(values url.Values, key string) int64 {
 	return valInt
 }
 
+func RequireInt64s(values url.Values, key string) []int64 {
+	valStrs, ok := values[key]
+
+	if !ok {
+		RequirePanic("required variable " + key + " empty")
+	}
+
+	valInts := make([]int64, 0)
+
+	for _, valStr := range valStrs {
+		if valStr == "" {
+			RequirePanic("required variable " + key + " empty")
+		}
+
+		valInt, err := strconv.ParseInt(valStr, 10, 64)
+
+		if err != nil {
+			log.Panicln(err)
+		}
+
+		valInts = append(valInts, valInt)
+	}
+
+	return valInts
+}
+
+func OptionalInt64s(values url.Values, key string) []int64 {
+	valStrs, ok := values[key]
+
+	valInts := make([]int64, 0)
+
+	if !ok {
+		return valInts
+	}
+
+	for _, valStr := range valStrs {
+		if valStr == "" {
+			RequirePanic("required variable " + key + " empty")
+		}
+
+		valInt, err := strconv.ParseInt(valStr, 10, 64)
+
+		if err != nil {
+			log.Panicln(err)
+		}
+
+		valInts = append(valInts, valInt)
+	}
+
+	return valInts
+}
+
 func OptionalInt64(values url.Values, key string) *int64 {
 	valStr := values.Get(key)
 
@@ -117,6 +169,22 @@ func OptionalString(values url.Values, key string) string {
 	valStr = strings.TrimSpace(valStr)
 
 	return valStr
+}
+
+func OptionalStrings(values url.Values, key string) []string {
+	n, ok := values[key]
+
+	if !ok || len(n) == 0 {
+		return []string{}
+	}
+
+	m := make([]string, len(n))
+
+	for i, str := range n {
+		m[i] = strings.TrimSpace(str)
+	}
+
+	return m
 }
 
 func OptionalFloat64(values url.Values, key string) *float64 {

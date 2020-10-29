@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 )
 
-func ServeStatic(config ServerConfig, dataDir string) {
-	staticDir := filepath.Join(dataDir, "web", "static")
+func ServeStatic(config ServerConfig, dataDir string, appName string) {
+	staticDir := filepath.Join(dataDir, "web", appName, "static")
 	http.Handle( "/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(staticDir))))
 }
 

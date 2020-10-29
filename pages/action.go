@@ -28,3 +28,7 @@ type send struct {
 	r        io.Reader
 	closeFn  func()
 }
+
+type requireAuth struct {
+	realm string
+}

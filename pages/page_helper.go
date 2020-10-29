@@ -14,7 +14,17 @@ type PageHelper struct {
 }
 
 func (PageHelper) FormatEqual(v1, v2 interface{}, str string) string {
-	if reflect.DeepEqual(v1, v2) {
+	x1 := reflect.ValueOf(v1)
+	x2 := reflect.ValueOf(v2)
+
+	if x1.IsZero() || x2.IsZero() {
+		return ""
+	}
+	
+	x1 = reflect.Indirect(x1)
+	x2 = reflect.Indirect(x2)
+	
+	if reflect.DeepEqual(x1.Interface(), x2.Interface()) {
 		return str
 	}
 

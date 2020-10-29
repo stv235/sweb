@@ -72,3 +72,11 @@ func daysToNext(w1, w2 time.Weekday) int {
 func NextWeekday(t time.Time, weekday time.Weekday) time.Time {
 	return t.AddDate(0, 0, daysToNext(t.Weekday(), weekday))
 }
+
+func PreviousMonday(t time.Time) time.Time {
+	for t.Weekday() != time.Monday {
+		t = t.AddDate(0, 0, -1)
+	}
+
+	return t
+}

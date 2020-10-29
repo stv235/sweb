@@ -9,6 +9,7 @@ import (
 type ColumnDef struct {
 	Name string
 	Primary bool
+	ReadOnly bool
 }
 
 func (columnDef *ColumnDef) parse(val string) {
@@ -17,7 +18,14 @@ func (columnDef *ColumnDef) parse(val string) {
 	columnDef.Name = parts[0]
 
 	if len(parts) > 1 {
-		columnDef.Primary = true
+		for _, part := range parts[1:] {
+			switch part {
+			case "primary":
+				columnDef.Primary = true
+			case "readonly":
+				columnDef.ReadOnly = true
+			}
+		}
 	}
 }
 

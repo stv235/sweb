@@ -12,8 +12,8 @@ type StreamContext struct {
 
 	ContentType string
 
-	W              io.Writer
-	R              io.ReadCloser
+	W    io.Writer
+	R    io.ReadCloser
 }
 
 func (ctx *StreamContext) ReadMultipartForm() *multipart.Form {
@@ -43,3 +43,4 @@ func (ctx *StreamContext) ReadMultipartForm() *multipart.Form {
 func (ctx *StreamContext) Send(r io.Reader, mimeType string, closeFn func()) {
 	ctx.action = &send{ r: r, mimeType: mimeType, closeFn: closeFn }
 }
+
