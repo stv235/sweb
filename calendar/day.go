@@ -53,3 +53,22 @@ func Day(t time.Time) time.Time {
 func Today() time.Time {
 	return Day(time.Now())
 }
+
+func daysToNext(w1, w2 time.Weekday) int {
+	d1 := int(w1)
+	d2 := int(w2)
+
+	if d1 == d2 {
+		return 7
+	}
+
+	if d1 < d2 {
+		return d2 - d1
+	}
+
+	return d2 + 7 - d1
+}
+
+func NextWeekday(t time.Time, weekday time.Weekday) time.Time {
+	return t.AddDate(0, 0, daysToNext(t.Weekday(), weekday))
+}
