@@ -12,6 +12,8 @@ var ErrCreateScriptNotFound = errors.New("database create script not found")
 var ErrEmptyDriver = errors.New("empty driver")
 var ErrEmptyDataSourceName = errors.New("empty data source name")
 
+const DriverName = "sweb_sqlite3"
+
 func Create(config Config) *sql.DB {
 	if config.Driver == "" {
 		log.Panicln(ErrEmptyDriver)
@@ -21,15 +23,26 @@ func Create(config Config) *sql.DB {
 		log.Panicln(ErrEmptyDataSourceName)
 	}
 
-	sql.Register("sweb_sqlite3", &sqlite.SQLiteDriver{
-		ConnectHook: func(conn *sqlite.SQLiteConn) error {
-			if err := conn.RegisterFunc("match_or", matchOr, true); err != nil {
-				return err
-			}
+	registered := false
 
-			return nil
-		},
-	})
+	for _, driver := range sql.Drivers() {
+		if driver == DriverName {
+			registered = true
+			break
+		}
+	}
+
+	if !registered {
+		sql.Register(DriverName, &sqlite.SQLiteDriver{
+			ConnectHook: func(conn *sqlite.SQLiteConn) error {
+				if err := conn.RegisterFunc("match_or", matchOr, true); err != nil {
+					return err
+				}
+
+				return nil
+			},
+		})
+	}
 
 	db, err := sql.Open("sweb_sqlite3", config.DataSourceName)
 
